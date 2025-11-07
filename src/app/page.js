@@ -5,6 +5,7 @@ export default function HomePage() {
         <div>
         <h1>Super Awesome and Useful Helpdesk Board</h1>
        <Board />
+    
         </div>
     );
     }
