@@ -8,6 +8,7 @@ import StatusFilter from "./StatusFilter";
 export default function TicketBoard() {
     const [ tickets, setTickets ] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState("All");
+    const [queue, setQueue] = useState([]);
 
     useEffect(() => {
         fetch('/api/tickets')
@@ -46,13 +47,22 @@ useEffect(() => {
     }, Math.floor(Math.random() * 4000) + 6000);
     return () => clearInterval(interval);
 }, []);
+const filteredTickets = tickets.filter(ticket =>
+     selectedStatus === "All" || ticket.status === selectedStatus
+);
+
+function addToQueue(ticket) {
+    console.log(`Adding ticket ${ticket.id} to queue`);
+    setQueue(prevQueue => [...prevQueue, ticket]);
+}
+
 return (
     <div>
         <StatusFilter 
             selectedStatus={selectedStatus} 
             onStatusChange={setSelectedStatus} 
         />  
-<TicketList tickets={tickets} />
+<TicketList tickets={filteredTickets} onAddToQueue={addToQueue} />
 </div>
 );
 }
