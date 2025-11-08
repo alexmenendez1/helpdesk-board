@@ -4,6 +4,7 @@ import TicketList from "./TicketList";
 import StatusFilter from "./StatusFilter";
 import PriorityFilter from "./PriorityFilter";
 import MyQueueSummary from "./MyQueueSummary";
+import SearchBox from "./SearchBox";
 
 
 
@@ -12,6 +13,8 @@ export default function TicketBoard() {
     const [selectedStatus, setSelectedStatus] = useState("All");
     const [selectedPriority, setSelectedPriority] = useState("All");
     const [queue, setQueue] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+
 
     useEffect(() => {
         fetch('/api/tickets')
@@ -53,6 +56,9 @@ useEffect(() => {
 const filteredTickets = tickets.filter(ticket =>
      (selectedStatus === "All" || ticket.status === selectedStatus) &&
      (selectedPriority === "All" || ticket.priority === selectedPriority)
+     (ticket.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.assignee.toLowerCase().includes(searchQuery.toLowerCase()))
 );  
 
 function addToQueue(ticket) {
@@ -70,6 +76,8 @@ function clearQueue() {
 
 return (
     <div>
+        <SearchBox searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+
         <StatusFilter 
             selectedStatus={selectedStatus} 
             onStatusChange={setSelectedStatus} 
@@ -77,7 +85,8 @@ return (
         <PriorityFilter
             selectedPriority={selectedPriority} 
             onPriorityChange={setSelectedPriority} 
-        />  
+        /> 
+         
 <TicketList tickets={filteredTickets} onAddToQueue={addToQueue} />
 <MyQueueSummary queue={queue}
     onRemoveFromQueue={removeFromQueue} 
