@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import TicketList from "./TicketList";
 import StatusFilter from "./StatusFilter";
+import MyQueueSummary from "./MyQueueSummary";
 
 
 
@@ -55,6 +56,14 @@ function addToQueue(ticket) {
     console.log(`Adding ticket ${ticket.id} to queue`);
     setQueue(prevQueue => [...prevQueue, ticket]);
 }
+function removeFromQueue(ticket) {
+    setQueue(prev => prev.filter(t => t.id !== ticket.id));
+}
+
+function clearQueue() {
+    setQueue([]);
+}
+
 
 return (
     <div>
@@ -63,6 +72,9 @@ return (
             onStatusChange={setSelectedStatus} 
         />  
 <TicketList tickets={filteredTickets} onAddToQueue={addToQueue} />
+<MyQueueSummary queue={queue}
+    onRemoveFromQueue={removeFromQueue} 
+    onClearQueue={clearQueue} />
 </div>
 );
 }
