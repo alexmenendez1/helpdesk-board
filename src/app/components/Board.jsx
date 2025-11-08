@@ -1,8 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
+import TicketList from "./TicketList";
+import StatusFilter from "./StatusFilter";
+
+
+
 export default function TicketBoard() {
     const [ tickets, setTickets ] = useState([]);
-    
+    const [selectedStatus, setSelectedStatus] = useState("All");
+
     useEffect(() => {
         fetch('/api/tickets')
             .then(response => response.json())
@@ -40,4 +46,13 @@ useEffect(() => {
     }, Math.floor(Math.random() * 4000) + 6000);
     return () => clearInterval(interval);
 }, []);
+return (
+    <div>
+        <StatusFilter 
+            selectedStatus={selectedStatus} 
+            onStatusChange={setSelectedStatus} 
+        />  
+<TicketList tickets={tickets} />
+</div>
+);
 }
