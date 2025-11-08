@@ -54,12 +54,14 @@ useEffect(() => {
     return () => clearInterval(interval);
 }, []);
 const filteredTickets = tickets.filter(ticket =>
-     (selectedStatus === "All" || ticket.status === selectedStatus) &&
-     (selectedPriority === "All" || ticket.priority === selectedPriority)
-     (ticket.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.assignee.toLowerCase().includes(searchQuery.toLowerCase()))
-);  
+    (selectedStatus === "All" || ticket.status === selectedStatus) &&
+    (selectedPriority === "All" || ticket.priority === selectedPriority) &&
+    (ticket.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     ticket.assignee.toLowerCase().includes(searchQuery.toLowerCase()))
+);
+
+
 
 function addToQueue(ticket) {
     console.log(`Adding ticket ${ticket.id} to queue`);
