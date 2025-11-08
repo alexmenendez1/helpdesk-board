@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import TicketList from "./TicketList";
 import StatusFilter from "./StatusFilter";
+import PriorityFilter from "./PriorityFilter";
 import MyQueueSummary from "./MyQueueSummary";
 
 
@@ -9,6 +10,7 @@ import MyQueueSummary from "./MyQueueSummary";
 export default function TicketBoard() {
     const [ tickets, setTickets ] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState("All");
+    const [selectedPriority, setSelectedPriority] = useState("All");
     const [queue, setQueue] = useState([]);
 
     useEffect(() => {
@@ -49,8 +51,9 @@ useEffect(() => {
     return () => clearInterval(interval);
 }, []);
 const filteredTickets = tickets.filter(ticket =>
-     selectedStatus === "All" || ticket.status === selectedStatus
-);
+     (selectedStatus === "All" || ticket.status === selectedStatus) &&
+     (selectedPriority === "All" || ticket.priority === selectedPriority)
+);  
 
 function addToQueue(ticket) {
     console.log(`Adding ticket ${ticket.id} to queue`);
@@ -70,6 +73,10 @@ return (
         <StatusFilter 
             selectedStatus={selectedStatus} 
             onStatusChange={setSelectedStatus} 
+        />
+        <PriorityFilter
+            selectedPriority={selectedPriority} 
+            onPriorityChange={setSelectedPriority} 
         />  
 <TicketList tickets={filteredTickets} onAddToQueue={addToQueue} />
 <MyQueueSummary queue={queue}
